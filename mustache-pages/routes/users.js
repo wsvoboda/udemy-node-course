@@ -1,6 +1,18 @@
 const express = require("express");
 const router = express.Router();
 
+function authenticate(req, res, next) {
+  if (req.session) {
+    if (req.session.name) {
+      next();
+    } else {
+      res.redirect("/users/add-user");
+    }
+  } else {
+    res.redirect("/users/add-user");
+  }
+}
+
 router.get("/", (req, res) => {
   let user = {
     name: req.session.name,
@@ -16,6 +28,10 @@ router.get("/", (req, res) => {
 
 router.get("/add-user", (req, res) => {
   res.render("add-user");
+});
+
+router.get("/bank-accounts", authenticate, (req, res) => {
+  res.send("Bank Accounts");
 });
 
 router.post("/add-user", (req, res) => {

@@ -15,6 +15,7 @@ app.use(
 const VIEWS_PATH = path.join(__dirname, "/views");
 app.use(express.urlencoded({ extended: false })); // allows you to read the body (pull info from inputs on page)
 app.use("/users", userRoutes);
+// app.use("/users", authenticate, userRoutes); // do this if you want the user to be created in order to access any page of the site
 app.use("/css", express.static("css"));
 app.engine("mustache", mustacheExpress(VIEWS_PATH + "/partials", ".mustache"));
 app.set("views", VIEWS_PATH);
