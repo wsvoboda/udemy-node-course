@@ -3,7 +3,8 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   let user = {
-    name: "John Doe",
+    name: req.session.name,
+    age: req.session.age,
     address: {
       street: "789 Street",
       city: "Houston",
@@ -20,6 +21,11 @@ router.get("/add-user", (req, res) => {
 router.post("/add-user", (req, res) => {
   let name = req.body.name;
   let age = req.body.age;
+
+  if (req.session) {
+    req.session.name = name;
+    req.session.age = age;
+  }
   console.log(name);
   console.log(age);
   res.status(200).send();
@@ -32,7 +38,11 @@ router.get("/users", (req, res) => {
     { name: "Alex Lowe", age: 27 },
   ];
   users = [];
-  res.render("users", { users: users });
+  res.render("users", {
+    users: users,
+    name: req.session.name,
+    age: req.session.age,
+  });
 });
 
 module.exports = router;
