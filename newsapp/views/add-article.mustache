@@ -1,0 +1,36 @@
+<html>
+  <head>
+    {{> header}}
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Add Article</h1>
+      {{> menu}}
+      <form action="/users/add-article" method="POST">
+        <div class="mb-3">
+          <label for="exampleInputTitle" class="form-label">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter Article Title"
+            name="title"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputDescription" class="form-label"
+            >Description</label
+          >
+          <textarea
+            type="password"
+            class="form-control"
+            name="description"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    {{> footer}}
+  </body>
+</html>
