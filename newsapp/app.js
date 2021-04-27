@@ -34,6 +34,13 @@ app.get("/users/add-article", (req, res) => {
   res.render("add-article");
 });
 
+app.post("/users/delete-article", (req, res) => {
+  let articleId = req.body.articleid;
+  db.none("DELETE FROM articles WHERE articleid = $1", [articleId]).then(() => {
+    res.redirect("/users/articles");
+  });
+});
+
 app.post("/users/add-article", (req, res) => {
   let title = req.body.title;
   let description = req.body.description;
@@ -46,8 +53,32 @@ app.post("/users/add-article", (req, res) => {
   ]).then(() => res.send("SUCCESS!"));
 });
 
+app.post("/users/update-article", (req, res) => {
+  let title = req.body.title;
+  let description = req.body.description;
+  let articleId = req.body.articleId;
+
+  db.none("UPDATE articles SET title = $1, body =$2 WHERE articleid = $3", [
+    title,
+    description,
+    articleId,
+  ]).then(() => {
+    res.redirect("/users/articles");
+  });
+});
+
+app.get("/users/articles/edit/:articleId", (req, res) => {
+  let articleId = req.params.articleId;
+  db.one("SELECT articleid, title, body FROM articles WHERE articleid = $1", [
+    articleId,
+  ]).then((article) => {
+    res.render("edit-article", article);
+  });
+});
+
 app.get("/users/articles", (req, res) => {
-  let userId = req.session.user.userId;
+  // let userId = req.session.user.userId;
+  let userId = 3;
   db.any("SELECT articleid,title,body FROM articles WHERE userid = $1", [
     userId,
   ]).then((articles) => {
