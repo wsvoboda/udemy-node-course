@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const mustacheExpress = require("mustache-express");
-const bodyParser = require("body-parser");
 const pgp = require("pg-promise")();
 const bcrypt = require("bcrypt");
 const session = require("express-session");
@@ -11,11 +10,12 @@ const PORT = 3000;
 const SALT_ROUNDS = 10;
 
 const VIEWS_PATH = path.join(__dirname, "/views");
+app.use("/css", express.static("css"));
 
 app.engine("mustache", mustacheExpress(VIEWS_PATH + "/partials", ".mustache"));
 app.set("views", VIEWS_PATH);
 app.set("view engine", "mustache");
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: "abcdefg",
@@ -25,6 +25,12 @@ app.use(
 );
 
 const db = pgp(CONNECTION_STRING);
+
+app.get("/", (req, res) => {
+  db.any("SELECT articleid, title, body FROM articles").then((articles) => {
+    res.render("index", { articles: articles });
+  });
+});
 
 app.get("/login", (req, res) => {
   res.render("login");
