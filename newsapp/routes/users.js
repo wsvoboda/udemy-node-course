@@ -1,11 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-router.post("/delete-article", (req, res) => {
+// router.post("/delete-article", (req, res) => {
+//   let articleId = req.body.articleid;
+//   db.none("DELETE FROM articles WHERE articleid = $1", [articleId]).then(() => {
+//     res.redirect("/users/articles");
+//   });
+// });
+
+router.post("/delete-article", async (req, res) => {
   let articleId = req.body.articleid;
-  db.none("DELETE FROM articles WHERE articleid = $1", [articleId]).then(() => {
-    res.redirect("/users/articles");
-  });
+  await db.none("DELETE FROM articles WHERE articleid = $1", [articleId]);
+  res.redirect("/users/articles");
 });
 
 router.get("/add-article", (req, res) => {
