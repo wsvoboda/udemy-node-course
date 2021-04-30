@@ -49,7 +49,7 @@ router.post("/register", (req, res) => {
               username,
               hash,
             ]).then(() => {
-              res.send("SUCCESS");
+              res.redirect("add-article");
             });
           }
         });
