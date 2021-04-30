@@ -14,6 +14,10 @@ router.get("/", async (req, res) => {
   res.render("index", { articles: articles });
 });
 
+router.get("/hello", (req, res) => {
+  res.send("Hello World!");
+});
+
 router.get("/logout", (req, res, next) => {
   if (req.session) {
     req.session.destroy((error) => {
