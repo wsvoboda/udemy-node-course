@@ -4,11 +4,13 @@ const mustacheExpress = require("mustache-express");
 const path = require("path");
 const models = require("./models");
 const bcrypt = require("bcrypt");
+const session = require("express-session");
 
 const SALT_ROUNDS = 10;
 const PORT = 3000;
 const VIEWS_PATH = path.join(__dirname, "/views");
 
+app.use(session({ secret: "abcdefg", resave: true, saveUninitialized: false }));
 app.use(express.urlencoded({ extended: false }));
 
 app.engine("mustache", mustacheExpress(VIEWS_PATH + "/partials", ".mustache"));
@@ -50,6 +52,30 @@ app.post("/register", async (req, res) => {
 
 app.get("/login", (req, res) => {
   res.render("login");
+});
+
+app.post("/login", async (req, res) => {
+  let username = req.body.username;
+  let password = req.body.password;
+  let user = await models.User.findOne({
+    where: {
+      username: username,
+    },
+  });
+  if (user != null) {
+    bcrypt.compare(password, user.password, (error, result) => {
+      if (result) {
+        if (req.session) {
+          req.session.user = { userId: user.id };
+          res.redirect("/users/products");
+        }
+      } else {
+        res.render("login", { message: "Incorrect Username or Password" });
+      }
+    });
+  } else {
+    res.render("login", { message: "Incorrect Username or Password" });
+  }
 });
 
 app.listen(PORT, () =>
