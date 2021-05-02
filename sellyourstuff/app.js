@@ -15,6 +15,7 @@ global.__basedir = __dirname;
 
 app.use(session({ secret: "abcdefg", resave: true, saveUninitialized: false }));
 app.use("/uploads", express.static("uploads"));
+app.use("/css", express.static("css"));
 app.use(express.urlencoded({ extended: false }));
 
 app.engine("mustache", mustacheExpress(VIEWS_PATH + "/partials", ".mustache"));
