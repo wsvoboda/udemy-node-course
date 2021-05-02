@@ -11,7 +11,10 @@ const userRoutes = require("./routes/users");
 const PORT = 3000;
 const VIEWS_PATH = path.join(__dirname, "/views");
 
+global.__basedir = __dirname;
+
 app.use(session({ secret: "abcdefg", resave: true, saveUninitialized: false }));
+app.use("/uploads", express.static("uploads"));
 app.use(express.urlencoded({ extended: false }));
 
 app.engine("mustache", mustacheExpress(VIEWS_PATH + "/partials", ".mustache"));

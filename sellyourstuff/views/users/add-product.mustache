@@ -9,7 +9,7 @@
     <div class="container">
       {{>menu}}
 
-      <form>
+      <form action="/users/upload" method="POST" enctype="multipart/form-data">
         <label>Photo</label>
         <input type="file" name="photo" />
         <button type="submit">Upload</button>
@@ -25,7 +25,7 @@
             placeholder="Enter Title"
           />
         </div>
-        <div class="form-control">
+        <div class="form-group">
           <label>Description</label>
           <textarea
             name="description"
@@ -34,9 +34,10 @@
           ></textarea>
         </div>
         <div class="form-group">
-          <label>Price</label>
+          <label>Price</label><br />
           <input type="text" name="price" placeholder="Enter Price" />
         </div>
+
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
 
