@@ -7,7 +7,47 @@ const models = require("../models");
 let uniqueFileName = "";
 
 router.get("/add-product", (req, res) => {
-  res.render("users/add-product");
+  res.render("users/add-product", {
+    className: "product-preview-image-invisible",
+  });
+});
+
+router.post("/update-product", async (req, res) => {
+  const productId = req.body.productId;
+  const title = req.body.title;
+  const description = req.body.description;
+  const price = parseFloat(req.body.price);
+
+  const result = await models.Product.update(
+    {
+      title: title,
+      description: description,
+      price: price,
+      imageURL: uniqueFileName,
+    },
+    {
+      where: {
+        id: productId,
+      },
+    }
+  );
+  res.redirect("/users/products");
+});
+
+router.post("/uploads/edit/:productId", (req, res) => {
+  uploadFile(req, async (photoURL) => {
+    let productId = parseInt(req.params.productId);
+    let product = await models.Product.findByPk(productId);
+    let response = product.dataValues;
+    response.imageURL = photoURL;
+    res.render("users/edit", response);
+  });
+});
+
+router.get("/products/:productId", async (req, res) => {
+  let productId = req.params.productId;
+  let product = await models.Product.findByPk(productId);
+  res.render("users/edit", product.dataValues);
 });
 
 router.post("/delete-product", async (req, res) => {
