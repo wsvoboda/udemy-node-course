@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{>header}}
+    <title>Sell Your Stuff</title>
+  </head>
+  <body>
+    <div class="container">
+      {{>menu}}
+      <img src="/uploads/{{ imageURL }}" />
+      <h3>{{ title }}</h3>
+      <p>{{ description }}</p>
+      <small>${{ price }}</small>
+    </div>
+  </body>
+  {{>footer}}
+</html>

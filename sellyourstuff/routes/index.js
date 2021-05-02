@@ -5,12 +5,16 @@ const models = require("../models");
 
 const SALT_ROUNDS = 10;
 
+router.get("/products/:productId", async (req, res) => {
+  const productId = req.params.productId;
+  const product = await models.Product.findByPk(productId);
+  res.render("product-details", product.dataValues);
+});
+
 router.get("/", async (req, res) => {
   let products = await models.Product.findAll();
   res.render("index", { products: products });
 });
-
-module.exports = router;
 
 router.get("/login", (req, res) => {
   res.render("login");
@@ -72,3 +76,5 @@ router.post("/register", async (req, res) => {
     res.render("register", { message: "User already exists!" });
   }
 });
+
+module.exports = router;
